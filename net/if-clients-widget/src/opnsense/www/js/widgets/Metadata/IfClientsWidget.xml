@@ -1,0 +1,13 @@
+<metadata>
+    <ifclientswidget>
+        <filename>IfClientsWidget.js</filename>
+        <endpoints>
+            <endpoint>/diagnostics/interface/getArp</endpoint>
+        </endpoints>
+        <translations>
+            <title>Active Devices</title>
+            <h_interface>Interface</h_interface>
+            <h_clients>Clients</h_clients>
+        </translations>
+    </ifclientswidget>
+</metadata>
