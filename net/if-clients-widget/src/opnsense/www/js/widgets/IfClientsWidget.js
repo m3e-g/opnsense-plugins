@@ -87,9 +87,11 @@ export default class IfClientsWidget extends BaseTableWidget {
         const devs = [];
         cli_list.forEach(item => {
             if (item.hostname != ''){
-              devs.push(`${item.hostname}`);
+                devs.push(`${item.hostname}`);
+            } else if (item.manufacturer != ''){
+                devs.push(`<i>${item.manufacturer}</i>`);
             } else {
-              devs.push(`<i>${item.mac}</i>`);
+                devs.push(`<i>${item.mac}</i>`);
             }
         });
         return $(`<div class="if-clients-info-detail">
@@ -113,12 +115,19 @@ export default class IfClientsWidget extends BaseTableWidget {
       arp_list.forEach(item => {
           const intf = item.intf_description;
           if (if_dict[intf]) {
-              if_dict[intf].count += 1;
-              if_dict[intf].clients.push({'mac': item.mac, 'ip': item.ip, 'hostname': item.hostname});
+              if (item.permanent === false) { //Skip permanent entries
+                  if_dict[intf].count += 1;
+                  if_dict[intf].clients.push({'mac': item.mac, /*'ip': item.ip,*/ 'hostname': item.hostname, 'manufacturer': item.manufacturer});
+              }
           } else {
               if_dict[intf] = {};
-              if_dict[intf]['count'] = 1;
-              if_dict[intf]['clients'] = [{'mac': item.mac, 'ip': item.ip, 'hostname': item.hostname}];
+              if (item.permanent === true) {
+                if_dict[intf]['count'] = 0;
+                if_dict[intf]['clients'] = [];
+              } else {
+                if_dict[intf]['count'] = 1;
+                if_dict[intf]['clients'] = [{'mac': item.mac, /*'ip': item.ip,*/ 'hostname': item.hostname, 'manufacturer': item.manufacturer}];
+              }
           }
       });
       return if_dict;
